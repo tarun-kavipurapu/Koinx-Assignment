@@ -1,12 +1,30 @@
-import express, { Request, Response } from "express";
+// src/server.ts
+import dotenv from 'dotenv';
+import { httpServer } from './app';
+import connectDB from './db/index';
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, Express and TypeScript!");
+// Load environment variables from .env file
+dotenv.config({
+  path: './.env',
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+const startServer = () => {
+  const port = process.env.PORT || 3000;
+  httpServer.listen(port, () => {
+    console.info(`📑 Visit the documentation at: http://localhost:${port}`);
+    console.log(`⚙️  Server is running on port: ${port}`);
+  });
+};
+
+const init = async () => {
+  try {
+    await connectDB();
+    startServer();
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
+    process.exit(1); // Exit the process if DB connection fails
+  }
+};
+
+// Initialize the server
+init();
