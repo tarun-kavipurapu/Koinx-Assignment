@@ -2,7 +2,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import http from 'http';
 import { errorHandler } from './middlewares/error.middleware';
-import { fetchCryptoData } from './background-jobs/crypto.service';
 
 const app = express();
 const httpServer = http.createServer(app);
