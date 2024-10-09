@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { resolve } from 'path';
+import { CryptoHistory, ICrypto } from '../models/crypto.models';
 //ids can be seeperated by a , example bitcoin,ethereum,matic-network
 //This is Called Every Two Hrs by the cryptoJob cron job
 /**
@@ -15,7 +15,7 @@ import { resolve } from 'path';
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; //1second
-export const fetchCryptoData: any = async (
+const fetchCryptoData: any = async (
   vs_currency: string,
   ids: string,
   retries = MAX_RETRIES,
@@ -31,8 +31,6 @@ export const fetchCryptoData: any = async (
       },
     );
 
-    console.log(response.data);
-
     return response.data;
   } catch (error: any) {
     if (retries > 0) {
@@ -44,5 +42,23 @@ export const fetchCryptoData: any = async (
     } else {
       console.error('Failed to fetch crypto data:', error.message);
     }
+  }
+};
+
+export const fetchInsertData = async (vs_currency: string, ids: string) => {
+  try {
+    const data = await fetchCryptoData(vs_currency, ids);
+    // console.log(data);
+    const documents: ICrypto[] = data.map((item: any) => ({
+      coinId: item.id,
+      symbol: item.symbol.toUpperCase(),
+      priceUSD: item.current_price,
+      marketCapUSD: item.market_cap,
+      percentchange24h: item.price_change_percentage_24h,
+      fetchedAt: new Date(item.last_updated),
+    }));
+    await CryptoHistory.insertMany(documents);
+  } catch (error: any) {
+    console.error('Error While Inserting the Data', error.message);
   }
 };

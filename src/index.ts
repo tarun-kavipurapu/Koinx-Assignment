@@ -1,7 +1,8 @@
-// src/server.ts
+// src/index.ts
 import dotenv from 'dotenv';
 import { httpServer } from './app';
 import connectDB from './db/index';
+import { fetchInsertData } from './background-jobs/crypto.service';
 
 // Load environment variables from .env file
 dotenv.config({
@@ -19,6 +20,7 @@ const startServer = () => {
 const init = async () => {
   try {
     await connectDB();
+
     startServer();
   } catch (err) {
     console.error('MongoDB connection error:', err);
