@@ -50,7 +50,7 @@ export const fetchInsertData = async (vs_currency: string, ids: string) => {
     const data = await fetchCryptoData(vs_currency, ids);
     // console.log(data);
     const documents: ICrypto[] = data.map((item: any) => ({
-      coinId: item.id,
+      coinId: item.id.toUpperCase(),
       symbol: item.symbol.toUpperCase(),
       priceUSD: item.current_price,
       marketCapUSD: item.market_cap,
