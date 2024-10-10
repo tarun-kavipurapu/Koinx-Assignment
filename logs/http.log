@@ -1,0 +1,2 @@
+[10 Oct, 2024 - 07:12:54:1254] [35mhttp[39m: [35m::1 GET /deviation?coin=matic-network 200 111 - 43.654 ms - PostmanRuntime/7.42.0[39m
+[10 Oct, 2024 - 07:12:59:1259] [35mhttp[39m: [35m::1 GET /deviation?coin=matic-network 200 111 - 34.730 ms - PostmanRuntime/7.42.0[39m
